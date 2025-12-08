@@ -114,7 +114,7 @@ def save_images(images, labels, class_map, out_dir):
 # ================================================================
 
 if __name__ == "__main__":
-    DATASET = ""C:\Users\moizz\Downloads\File Type Indentification""   #  15-class folder dataset
+    DATASET = ""C:\Users\moizz\Downloads\Tool Type Indentification""   
 
     X4, X10, X20, y, cmap = load_dataset(DATASET)
 
@@ -135,3 +135,4 @@ if __name__ == "__main__":
     save_images(X20, y, cmap, "img_20000")
 
     print("\n[DONE] All datasets created.")
+
