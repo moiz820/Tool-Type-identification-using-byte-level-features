@@ -2,37 +2,25 @@ import os
 import numpy as np
 from collections import Counter
 import json
+=================
 
-# ============================================================
-# 1. Extract histogram + entropy from a given byte fragment
-# ============================================================
-
-def extract_features_from_fragment(byte_arr):
+def extract_histogram(byte_arr):
     """
-    Takes a uint8 array (fragment) and returns:
-        - Normalized 256-bin histogram
-        - Shannon entropy
-    Output: 257-dim feature vector
+    Takes a uint8 array and returns:
+        - normalized 256-bin histogram
+    Output shape: (256,)
     """
     if len(byte_arr) == 0:
-        hist = np.zeros(256, dtype=np.float32)
-        entropy = 0.0
-        return np.append(hist, entropy)
+        return np.zeros(256, dtype=np.float32)
 
-    # Histogram
     counts = Counter(byte_arr)
     hist = np.array([counts.get(i, 0) for i in range(256)], dtype=np.float32)
-    hist_norm = hist / hist.sum()
-
-    # Entropy
-    p = hist_norm[hist_norm > 0]
-    entropy = float(-np.sum(p * np.log2(p)))
-
-    return np.append(hist_norm, entropy)
+    hist_norm = hist / hist.sum() if hist.sum() > 0 else hist
+    return hist_norm
 
 
 # ============================================================
-# 2. Extract byte fragments of given sizes
+# 2. Extract byte fragments for all fragment sizes
 # ============================================================
 
 FRAGMENT_SIZES = [64, 128, 1024, 2048, 4096]
@@ -42,8 +30,8 @@ def extract_all_fragments(file_path):
     For each fragment size:
         - Reads first N bytes
         - Pads if needed
-        - Extracts histogram + entropy
-    Returns: dict {size: 257-dim vector}
+        - Extracts histogram ONLY
+    Returns: dict {size: (256-dim vector)}
     """
     with open(file_path, "rb") as f:
         raw = f.read()
@@ -57,14 +45,14 @@ def extract_all_fragments(file_path):
             fragment = raw[:size]
 
         arr = np.frombuffer(fragment, dtype=np.uint8)
-        fv = extract_features_from_fragment(arr)
+        fv = extract_histogram(arr)   # NO entropy
         results[size] = fv
 
     return results
 
 
 # ============================================================
-# 3. Load dataset with 15 class folders
+# 3. Load dataset with 15 classes
 # ============================================================
 
 def load_fragment_dataset(root_dir):
@@ -102,7 +90,7 @@ def load_fragment_dataset(root_dir):
                 labels.append(label_id)
 
             except Exception as e:
-                print(f"[ERROR] Failed on {fpath}: {e}")
+                print(f"[ERROR] {fpath}: {e}")
 
         label_id += 1
 
@@ -135,7 +123,7 @@ def save_all(
     with open(f"{prefix}_class_map.json", "w") as f:
         json.dump(class_map, f, indent=4)
 
-    print("[DONE] All fragment-based feature datasets saved.")
+    print("[DONE] All fragment-based histogram datasets saved.")
 
 
 # ============================================================
@@ -143,7 +131,7 @@ def save_all(
 # ============================================================
 
 if __name__ == "__main__":
-    DATASET = "C:\Users\moizz\Downloads\File Type Indentification"   # 15-class folder structure
+    DATASET = r"C:\Users\moizz\Downloads\File Type Indentification"
 
     X64, X128, X1024, X2048, X4096, y, cmap = load_fragment_dataset(DATASET)
 
