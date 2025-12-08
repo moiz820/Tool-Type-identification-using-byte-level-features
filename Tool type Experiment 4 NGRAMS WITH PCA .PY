@@ -13,7 +13,7 @@ from tensorflow.keras import layers, models
 # CONFIG
 # ============================
 
-DATASET_ROOT = ""C:\Users\moizz\Downloads\File Type Indentification""   # root folder with class subfolders
+DATASET_ROOT = ""C:\Users\moizz\Downloads\Tool Type Indentification""   # root folder with class subfolders
 FRAGMENT_SIZES = [10000, 20000, 50000, 70000]
 NGRAMS = [1, 2, 3, 4]
 
@@ -204,3 +204,4 @@ if __name__ == "__main__":
     print("\n[SUMMARY] Accuracies per (fragment_size, ngram):")
     for key, v in res_dict.items():
         print(f"{key}: {v:.4f}")
+
