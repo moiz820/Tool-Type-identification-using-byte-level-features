@@ -106,7 +106,7 @@ def save_dataset(X, y, out_prefix="byte_features"):
 # ============================================================
 
 if __name__ == "__main__":
-    DATASET_PATH = "C:\Users\moizz\Downloads\File Type Indentification"   # folder containing 15 class folders
+    DATASET_PATH = "C:\Users\moizz\Downloads\Tool Type Indentification"   # folder containing 15 class folders
 
     # Step 1 — Load and extract features
     X, y, class_map = load_histogram_entropy_dataset(DATASET_PATH)
@@ -120,3 +120,4 @@ if __name__ == "__main__":
         json.dump(class_map, f, indent=4)
 
     print("\n[COMPLETE] Histogram + Entropy dataset ready.")
+
