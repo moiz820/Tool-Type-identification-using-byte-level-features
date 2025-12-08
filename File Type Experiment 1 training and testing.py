@@ -105,9 +105,6 @@ def build_cnn():
     return model
 
 
-# ============================================================
-# TRAIN + TEST ALL 3 MODELS FOR ONE WINDOW TYPE
-# ============================================================
 
 def evaluate_models(X, y):
     X_train, X_test, y_train, y_test = train_test_split(
@@ -147,10 +144,6 @@ def evaluate_models(X, y):
     return acc_cnn*100, acc_svm*100, acc_xgb*100
 
 
-# ============================================================
-# MASTER PIPELINE
-# ============================================================
-
 def run_all(dataset_path):
     results = {}
 
@@ -177,12 +170,10 @@ def run_all(dataset_path):
 
     return results
 
-
-# ============================================================
-# RUN
-# ============================================================
+================================================
 
 if __name__ == "__main__":
     DATASET = r"C:\Users\moizz\Downloads\File Type Indentification/Fragments"
     output = run_all(DATASET)
     print("\nFINAL RESULTS:\n", output)
+
